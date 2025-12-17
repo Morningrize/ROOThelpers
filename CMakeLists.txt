@@ -14,11 +14,15 @@ target_include_directories(ROOThelpers INTERFACE
 )
 target_link_libraries(ROOThelpers INTERFACE ${ROOT_LIBRARIES})
 
-enable_testing()
+find_package(GTest QUIET)
 
-add_executable(test_axisstyle EXCLUDE_FROM_ALL tests/test_axisstyle.cpp)
-target_link_libraries(test_axisstyle PRIVATE ROOThelpers ${ROOT_LIBRARIES})
-
-add_test(NAME AxisStyleTest COMMAND test_axisstyle)
-
-add_custom_target(tests DEPENDS test_axisstyle)
+if (GTest_FOUND)
+    message("GTest found")
+    enable_testing()
+    add_executable(test_axisstyle EXCLUDE_FROM_ALL tests/test_axisstyle.cpp)
+    target_link_libraries(test_axisstyle PRIVATE ROOThelpers GTest::gtest GTest::gtest_main)
+    add_test(NAME AxisStyleTest COMMAND test_axisstyle)
+    add_custom_target(tests DEPENDS test_axisstyle)
+else()
+    message(WARNING "GTest not found. Tests will not be built. Install GTest to enable tests.")
+endif()

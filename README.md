@@ -28,11 +28,11 @@ You can add ROOThelpers to your project without copying headers manually by usin
 
 4. **Include the headers in your code:**
     ```cpp
-    #include "AxisStyle.h"
+    #include "axis_style.h"
     #include <TH1F.h>
 
     TH1F h("h", "test", 10, 0, 1);
-    StyleAxis(&h, "X axis", "Y axis");
+    ROOThelpers::style_axis(&h, "X axis", "Y axis");
     ```
 
 The `ROOThelpers` INTERFACE library will automatically add the correct include path for you, so you do **not** need to copy headers or manually set include directories.
