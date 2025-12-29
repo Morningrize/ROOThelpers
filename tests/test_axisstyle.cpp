@@ -12,8 +12,8 @@ public:
 };
 
 TEST_F(AxisStyleTest, StyleAxisTH1F) {
-  TH1F h("h", "h", 1, 0, 1);
-  TAxis *xaxis = h.GetXaxis();
+  TH1F histo("h", "h", 1, 0, 1);
+  TAxis *xaxis = histo.GetXaxis();
   ROOThelpers::style_axis(xaxis, "XTitle", 0.06F, 0.06F, 1.2F);
 
   EXPECT_STREQ(xaxis->GetTitle(), "XTitle");
@@ -23,8 +23,8 @@ TEST_F(AxisStyleTest, StyleAxisTH1F) {
 }
 
 TEST_F(AxisStyleTest, StyleAxisTH1D) {
-  TH1D h("h", "h", 1, 0, 1);
-  TAxis *xaxis = h.GetXaxis();
+  TH1D histo("h", "h", 1, 0, 1);
+  TAxis *xaxis = histo.GetXaxis();
   ROOThelpers::style_axis(xaxis, "XTitle", 0.06F, 0.06F, 1.2F);
 
   EXPECT_STREQ(xaxis->GetTitle(), "XTitle");
@@ -34,9 +34,9 @@ TEST_F(AxisStyleTest, StyleAxisTH1D) {
 }
 
 TEST_F(AxisStyleTest, StyleXAxisTH1F) {
-  TH1F h("h", "h", 1, 0, 1);
-  ROOThelpers::style_x_axis(&h);
-  TAxis *xaxis = h.GetXaxis();
+  TH1F histo("h", "h", 1, 0, 1);
+  ROOThelpers::style_x_axis(&histo);
+  TAxis *xaxis = histo.GetXaxis();
 
   EXPECT_STREQ(xaxis->GetTitle(), "");
   EXPECT_FLOAT_EQ(xaxis->GetTitleSize(), ROOThelpers::DEFAULT_TITLE_SIZE);
@@ -45,9 +45,9 @@ TEST_F(AxisStyleTest, StyleXAxisTH1F) {
 }
 
 TEST_F(AxisStyleTest, StyleYAxisTH1F) {
-  TH1F h("h", "h", 1, 0, 1);
-  ROOThelpers::style_y_axis(&h, "YTitle", 0.06F, 0.06F, 1.2F);
-  TAxis *yaxis = h.GetYaxis();
+  TH1F histo("h", "h", 1, 0, 1);
+  ROOThelpers::style_y_axis(&histo, "YTitle", 0.06F, 0.06F, 1.2F);
+  TAxis *yaxis = histo.GetYaxis();
 
   EXPECT_STREQ(yaxis->GetTitle(), "YTitle");
   EXPECT_FLOAT_EQ(yaxis->GetTitleSize(), 0.06F);
@@ -56,17 +56,17 @@ TEST_F(AxisStyleTest, StyleYAxisTH1F) {
 }
 
 TEST_F(AxisStyleTest, StyleXAxisTH2F) {
-  TH2F h("h", "h", 1, 0, 1, 1, 0, 1);
+  TH2F histo("h", "h", 1, 0, 1, 1, 0, 1);
 
-  TAxis *yaxis = h.GetYaxis();
+  TAxis *yaxis = histo.GetYaxis();
   yaxis->SetTitle("YDontTouch");
   yaxis->SetTitleSize(0.06F);
   yaxis->SetLabelSize(0.06F);
   yaxis->SetTitleOffset(1.2F);
 
-  ROOThelpers::style_x_axis(&h);
+  ROOThelpers::style_x_axis(&histo);
 
-  TAxis *xaxis = h.GetXaxis();
+  TAxis *xaxis = histo.GetXaxis();
   EXPECT_STREQ(xaxis->GetTitle(), "");
   EXPECT_FLOAT_EQ(xaxis->GetTitleSize(), ROOThelpers::DEFAULT_TITLE_SIZE);
   EXPECT_FLOAT_EQ(xaxis->GetLabelSize(), ROOThelpers::DEFAULT_LABEL_SIZE);
@@ -78,17 +78,17 @@ TEST_F(AxisStyleTest, StyleXAxisTH2F) {
 }
 
 TEST_F(AxisStyleTest, StyleYAxisTH2F) {
-  TH2F h("h", "h", 1, 0, 1, 1, 0, 1);
+  TH2F histo("h", "h", 1, 0, 1, 1, 0, 1);
 
-  TAxis *xaxis = h.GetXaxis();
+  TAxis *xaxis = histo.GetXaxis();
   xaxis->SetTitle("XDontTouch");
   xaxis->SetTitleSize(0.06F);
   xaxis->SetLabelSize(0.06F);
   xaxis->SetTitleOffset(1.2F);
 
-  ROOThelpers::style_y_axis(&h);
+  ROOThelpers::style_y_axis(&histo);
 
-  TAxis *yaxis = h.GetYaxis();
+  TAxis *yaxis = histo.GetYaxis();
   EXPECT_STREQ(yaxis->GetTitle(), "");
   EXPECT_FLOAT_EQ(yaxis->GetTitleSize(), ROOThelpers::DEFAULT_TITLE_SIZE);
   EXPECT_FLOAT_EQ(yaxis->GetLabelSize(), ROOThelpers::DEFAULT_LABEL_SIZE);
@@ -100,11 +100,11 @@ TEST_F(AxisStyleTest, StyleYAxisTH2F) {
 }
 
 TEST_F(AxisStyleTest, StyleAxesTH2F) {
-  TH2F h("h", "h", 1, 0, 1, 1, 0, 1);
-  ROOThelpers::style_axes(&h, "XTitle", "YTitle");
+  TH2F histo("h", "h", 1, 0, 1, 1, 0, 1);
+  ROOThelpers::style_axes(&histo, "XTitle", "YTitle");
 
-  TAxis *xaxis = h.GetXaxis();
-  TAxis *yaxis = h.GetYaxis();
+  TAxis *xaxis = histo.GetXaxis();
+  TAxis *yaxis = histo.GetYaxis();
 
   EXPECT_STREQ(xaxis->GetTitle(), "XTitle");
   EXPECT_FLOAT_EQ(xaxis->GetTitleSize(), ROOThelpers::DEFAULT_TITLE_SIZE);
