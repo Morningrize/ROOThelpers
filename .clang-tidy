@@ -14,7 +14,7 @@ Checks: >
   clang-analyzer-*,
   cppcoreguidelines-*,
   -cppcoreguidelines-pro-type-reinterpret-cast,
-   -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-avoid-magic-numbers,
   google-build-using-namespace,
   google-explicit-constructor,
   google-global-names-in-headers,
@@ -30,7 +30,7 @@ Checks: >
   -modernize-use-trailing-return-type,
   performance-*,
   readability-*,
-  -readability-identifier-length,
+  readability-identifier-length,
   -readability-magic-numbers
 
 CheckOptions:
