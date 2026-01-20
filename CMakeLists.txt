@@ -21,10 +21,25 @@ find_package(GTest QUIET)
 if (GTest_FOUND)
     message("GTest found")
     enable_testing()
-    add_executable(test_axisstyle EXCLUDE_FROM_ALL tests/test_axisstyle.cpp)
-    target_link_libraries(test_axisstyle PRIVATE ROOThelpers GTest::gtest GTest::gtest_main)
-    add_test(NAME AxisStyleTest COMMAND test_axisstyle)
-    add_custom_target(tests DEPENDS test_axisstyle)
+    include(GoogleTest)
+
+    file(GLOB TEST_SOURCES CONFIGURE_DEPENDS tests/test_*.cpp)
+
+    foreach(test_src ${TEST_SOURCES})
+        get_filename_component(test_name ${test_src} NAME_WE)
+        add_executable(${test_name} EXCLUDE_FROM_ALL ${test_src})
+        target_link_libraries(${test_name}
+            PRIVATE 
+                ROOThelpers
+                GTest::gtest
+                GTest::gtest_main
+        )
+        gtest_discover_tests(${test_name})
+        list(APPEND ALL_TEST_TARGETS ${test_name})   
+    endforeach()
+    
+    add_custom_target(tests DEPENDS ${ALL_TEST_TARGETS})
+
 else()
     message(WARNING "GTest not found. Tests will not be built. Install GTest to enable tests.")
 endif()

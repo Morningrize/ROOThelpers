@@ -4,7 +4,7 @@ A header-only C++ library providing helper functions for ROOT analysis.
 
 ## Features
 
-- Simple helpers for ROOT objects (e.g., axis styling)
+- Simple helpers for ROOT objects (e.g., RAII wrapper, axis styling ...)
 
 ## Usage
 
