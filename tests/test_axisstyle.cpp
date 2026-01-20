@@ -1,7 +1,10 @@
 #include <gtest/gtest.h>
 
+#include <TAxis.h>
+#include <TH1.h>
 #include <TH1D.h>
 #include <TH1F.h>
+#include <TH2.h>
 #include <TH2F.h>
 
 #include "axis_style.h"
@@ -14,7 +17,7 @@ public:
 TEST_F(AxisStyleTest, StyleAxisTH1F) {
   TH1F histo("h", "h", 1, 0, 1);
   TAxis *xaxis = histo.GetXaxis();
-  ROOThelpers::style_axis(xaxis, "XTitle", 0.06F, 0.06F, 1.2F);
+  ROOThelpers::styleAxis(xaxis, "XTitle", 0.06F, 0.06F, 1.2F);
 
   EXPECT_STREQ(xaxis->GetTitle(), "XTitle");
   EXPECT_FLOAT_EQ(xaxis->GetTitleSize(), 0.06F);
@@ -25,7 +28,7 @@ TEST_F(AxisStyleTest, StyleAxisTH1F) {
 TEST_F(AxisStyleTest, StyleAxisTH1D) {
   TH1D histo("h", "h", 1, 0, 1);
   TAxis *xaxis = histo.GetXaxis();
-  ROOThelpers::style_axis(xaxis, "XTitle", 0.06F, 0.06F, 1.2F);
+  ROOThelpers::styleAxis(xaxis, "XTitle", 0.06F, 0.06F, 1.2F);
 
   EXPECT_STREQ(xaxis->GetTitle(), "XTitle");
   EXPECT_FLOAT_EQ(xaxis->GetTitleSize(), 0.06F);
@@ -35,7 +38,7 @@ TEST_F(AxisStyleTest, StyleAxisTH1D) {
 
 TEST_F(AxisStyleTest, StyleXAxisTH1F) {
   TH1F histo("h", "h", 1, 0, 1);
-  ROOThelpers::style_x_axis(&histo);
+  ROOThelpers::styleXaxis(&histo);
   TAxis *xaxis = histo.GetXaxis();
 
   EXPECT_STREQ(xaxis->GetTitle(), "");
@@ -46,7 +49,7 @@ TEST_F(AxisStyleTest, StyleXAxisTH1F) {
 
 TEST_F(AxisStyleTest, StyleYAxisTH1F) {
   TH1F histo("h", "h", 1, 0, 1);
-  ROOThelpers::style_y_axis(&histo, "YTitle", 0.06F, 0.06F, 1.2F);
+  ROOThelpers::styleYaxis(&histo, "YTitle", 0.06F, 0.06F, 1.2F);
   TAxis *yaxis = histo.GetYaxis();
 
   EXPECT_STREQ(yaxis->GetTitle(), "YTitle");
@@ -64,7 +67,7 @@ TEST_F(AxisStyleTest, StyleXAxisTH2F) {
   yaxis->SetLabelSize(0.06F);
   yaxis->SetTitleOffset(1.2F);
 
-  ROOThelpers::style_x_axis(&histo);
+  ROOThelpers::styleXaxis(&histo);
 
   TAxis *xaxis = histo.GetXaxis();
   EXPECT_STREQ(xaxis->GetTitle(), "");
@@ -86,7 +89,7 @@ TEST_F(AxisStyleTest, StyleYAxisTH2F) {
   xaxis->SetLabelSize(0.06F);
   xaxis->SetTitleOffset(1.2F);
 
-  ROOThelpers::style_y_axis(&histo);
+  ROOThelpers::styleYaxis(&histo);
 
   TAxis *yaxis = histo.GetYaxis();
   EXPECT_STREQ(yaxis->GetTitle(), "");
@@ -101,7 +104,7 @@ TEST_F(AxisStyleTest, StyleYAxisTH2F) {
 
 TEST_F(AxisStyleTest, StyleAxesTH2F) {
   TH2F histo("h", "h", 1, 0, 1, 1, 0, 1);
-  ROOThelpers::style_axes(&histo, "XTitle", "YTitle");
+  ROOThelpers::styleAxes(&histo, "XTitle", "YTitle");
 
   TAxis *xaxis = histo.GetXaxis();
   TAxis *yaxis = histo.GetYaxis();

@@ -19,8 +19,8 @@ template <typename T> concept HasAxis = requires(T *obj) {
   ->std::same_as<TAxis *>;
 };
 
-inline void style_axis(TAxis *axis, const char *title, float title_size,
-                       float label_size, float title_offset) noexcept {
+inline void styleAxis(TAxis *axis, const char *title, float title_size,
+                      float label_size, float title_offset) noexcept {
   axis->SetTitle(title);
   axis->SetTitleSize(title_size);
   axis->SetLabelSize(label_size);
@@ -29,30 +29,30 @@ inline void style_axis(TAxis *axis, const char *title, float title_size,
 
 /// Style the X axis of an object
 template <HasAxis TObject>
-void style_x_axis(TObject *obj, const char *title = "",
-                  float title_size = DEFAULT_TITLE_SIZE,
-                  float label_size = DEFAULT_LABEL_SIZE,
-                  float title_offset = DEFAULT_X_TITLE_OFFSET) noexcept {
+void styleXaxis(TObject *obj, const char *title = "",
+                float title_size = DEFAULT_TITLE_SIZE,
+                float label_size = DEFAULT_LABEL_SIZE,
+                float title_offset = DEFAULT_X_TITLE_OFFSET) noexcept {
   TAxis *x_axis = obj->GetXaxis();
-  style_axis(x_axis, title, title_size, label_size, title_offset);
+  styleAxis(x_axis, title, title_size, label_size, title_offset);
 }
 
 /// Style the Y axis of an object
 template <HasAxis TObject>
-void style_y_axis(TObject *obj, const char *title = "",
-                  float title_size = DEFAULT_TITLE_SIZE,
-                  float label_size = DEFAULT_LABEL_SIZE,
-                  float title_offset = DEFAULT_Y_TITLE_OFFSET) noexcept {
+void styleYaxis(TObject *obj, const char *title = "",
+                float title_size = DEFAULT_TITLE_SIZE,
+                float label_size = DEFAULT_LABEL_SIZE,
+                float title_offset = DEFAULT_Y_TITLE_OFFSET) noexcept {
   TAxis *y_axis = obj->GetYaxis();
-  style_axis(y_axis, title, title_size, label_size, title_offset);
+  styleAxis(y_axis, title, title_size, label_size, title_offset);
 }
 
 /// Style both X and Y axes with default settings
 template <HasAxis TObject>
-void style_axes(TObject *obj, const char *xtitle = "",
-                const char *ytitle = "") noexcept {
-  style_x_axis(obj, xtitle);
-  style_y_axis(obj, ytitle);
+void styleAxes(TObject *obj, const char *xtitle = "",
+               const char *ytitle = "") noexcept {
+  styleXaxis(obj, xtitle);
+  styleYaxis(obj, ytitle);
 }
 
 } // namespace ROOThelpers
