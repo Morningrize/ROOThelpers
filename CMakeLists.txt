@@ -10,11 +10,13 @@ include_directories(${ROOT_INCLUDE_DIRS})
 
 option(ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
 
-add_library(ROOThelpers INTERFACE)
-target_include_directories(ROOThelpers INTERFACE
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx)
+
+add_library(ROOThelpers SHARED ${SOURCES})
+target_include_directories(ROOThelpers PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-target_link_libraries(ROOThelpers INTERFACE ${ROOT_LIBRARIES})
+target_link_libraries(ROOThelpers PUBLIC ${ROOT_LIBRARIES})
 
 find_package(GTest QUIET)
 

@@ -1,6 +1,6 @@
 # ROOThelpers
 
-A header-only C++ library providing helper functions for ROOT analysis.
+A C++ library providing helper functions for ROOT analysis.
 
 ## Features
 
@@ -35,7 +35,7 @@ You can add ROOThelpers to your project without copying headers manually by usin
     ROOThelpers::style_axis(&h, "X axis", "Y axis");
     ```
 
-The `ROOThelpers` INTERFACE library will automatically add the correct include path for you, so you do **not** need to copy headers or manually set include directories.
+The `ROOThelpers` library will automatically add the correct include path for you, so you do **not** need to copy headers or manually set include directories.
 
 ## Testing
 
