@@ -1,6 +1,7 @@
-#include <gtest/gtest.h>
 #include <stdexcept>
 #include <utility>
+
+#include <gtest/gtest.h>
 
 #include <TDirectory.h>
 #include <TFile.h>
