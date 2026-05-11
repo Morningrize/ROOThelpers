@@ -28,6 +28,25 @@ protected:
 };
 
 // ----------------------
+// trim
+// ----------------------
+
+TEST(TrimStringTest, TrimsLeadingTrailingWhitespace) {
+  const std::string test_string = "\t I need a trim ";
+  EXPECT_EQ(ROOThelpers::trim(test_string), "I need a trim");
+}
+
+TEST(TrimStringTest, WhitespaceOnlyTrimsToEmpty) {
+  const std::string test_string = "\t \n \t";
+  EXPECT_TRUE(ROOThelpers::trim(test_string).empty());
+}
+
+TEST(TrimStringTest, TrimEmptyString) {
+  const std::string test_string;
+  EXPECT_TRUE(ROOThelpers::trim(test_string).empty());
+}
+
+// ----------------------
 // parse_lines
 // ----------------------
 
@@ -60,6 +79,16 @@ TEST_F(ParseLinesTest, SkipsEmptyLines) {
 
   const auto lines = ROOThelpers::parse_lines(tmp_file.string());
   EXPECT_EQ(lines.size(), 2U);
+  EXPECT_EQ(lines[1], "line2");
+}
+
+TEST_F(ParseLinesTest, TrimsLeadingTrailingWhitespace) {
+  std::ofstream file_stream(tmp_file);
+  file_stream << "\tline1\n\nline2 \n \n";
+  file_stream.close();
+  const auto lines = ROOThelpers::parse_lines(tmp_file.string());
+  EXPECT_EQ(lines.size(), 2U);
+  EXPECT_EQ(lines[0], "line1");
   EXPECT_EQ(lines[1], "line2");
 }
 

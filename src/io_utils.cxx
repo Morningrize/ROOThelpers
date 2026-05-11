@@ -5,8 +5,21 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <cctype>
+#include <algorithm>
+#include <string_view>
 
 namespace ROOThelpers {
+
+std::string_view trim(const std::string &untrimmed_string) {
+  auto not_a_space = [] (unsigned char cha) {
+    return !(std::isspace(cha));
+  };
+  auto first = std::ranges::find_if(untrimmed_string, not_a_space);
+  auto last = std::ranges::find_if(untrimmed_string.rbegin(),untrimmed_string.rend(), not_a_space).base();
+  if (first >= last) {return {};}
+  return std::string_view{first, last};
+}
 
 std::vector<std::string> parse_lines(const std::string& input_file) {
   std::vector<std::string> lines;
@@ -17,8 +30,9 @@ std::vector<std::string> parse_lines(const std::string& input_file) {
   }
   std::string line;
   while (std::getline(input_file_stream, line)) {
-    if (!line.empty()) {
-      lines.push_back(line);
+    auto trimmed = trim(line);
+    if (!trimmed.empty()) {
+      lines.emplace_back(trimmed);
     }
   }
   return lines;
