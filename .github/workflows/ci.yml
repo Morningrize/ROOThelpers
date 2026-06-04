@@ -1,5 +1,9 @@
 name: CI
 
+defaults:
+  run:
+    shell: bash
+
 on:
   push:
     branches: [ master ]
@@ -9,19 +13,42 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    container: morningrize/debian13-root:1.0
+    container: morningrize/cern_root:debian13
+
     steps:
       - uses: actions/checkout@v4
 
+      - name: Checkout AnalysisCoreCpp
+        uses: actions/checkout@v4
+        with:
+          repository: Morningrize/AnalysisCoreCpp
+          token: ${{ secrets.ANALYSISCORECPP_READ_TOKEN }}
+          path: AnalysisCoreCpp
+
+      - name: Install git
+        run: apt-get update && apt-get install -y git
+
+      - name: Install build tools
+        run: |
+          apt-get update
+          apt-get install -y git clang-tidy clang-format libgtest-dev
+
+      - name: Build AnalysisCoreCpp
+        run: |
+          cmake -S AnalysisCoreCpp -B AnalysisCoreCpp/build
+          cmake --build AnalysisCoreCpp/build
+
       - name: Build
         run: |
+          . /usr/local/bin/thisroot.sh
           mkdir build
           cd build
-          cmake .. -DENABLE_CLANG_TIDY=ON
-          cmake --build . --target tests 
+          cmake .. -DENABLE_CLANG_TIDY=ON -DAnalysisCoreCpp_DIR="$GITHUB_WORKSPACE/AnalysisCoreCpp/build/cmake"
+          cmake --build . --target ROOThelpers_tests
 
       - name: Run tests
         run: |
+          . /usr/local/bin/thisroot.sh
           cd build
           ctest --output-on-failure
 
@@ -31,8 +58,9 @@ jobs:
 
       - name: Run clang-tidy
         run: |
+          . /usr/local/bin/thisroot.sh
           cd build
-          cmake --build . --target tidy 
+          cmake --build . --target tidy
 
       - name: Check formatting with clang-format
         run: |

@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+find_dependency(AnalysisCoreCpp CONFIG REQUIRED)
+find_dependency(ROOT REQUIRED)
+
+include("${CMAKE_CURRENT_LIST_DIR}/ROOThelpersTargets.cmake")
