@@ -8,23 +8,26 @@ A C++ library providing helper functions for ROOT analysis.
 
 ## Usage
 
-### As an External Dependency
+### As an External Dependency (`find_package`, no install required)
 
-You can add ROOThelpers to your project without copying headers manually by using CMake’s `add_subdirectory()` 
+Like `AnalysisCoreCpp`, this project exports a build-tree package config. This means users can build `ROOThelpers` however they want and consume it with `find_package` directly from the build directory.
 
-1. **Add ROOThelpers to your project**  
-   - Clone the repo
+1. **Configure/build ROOThelpers**
+   ```bash
+   cmake -S /path/to/ROOThelpers -B /path/to/ROOThelpers/build
+   cmake --build /path/to/ROOThelpers/build
+   ```
 
-2. **Set the ${ROOThelpers_DIR} environment variable**
-    ```bash
-    export ROOThelpers_DIR="/path/to/ROOThelpers"
-    ```
+2. **Point your consumer project to ROOThelpers build package dir**
+   ```bash
+   cmake -S . -B build -DROOThelpers_DIR=/path/to/ROOThelpers/build/cmake
+   ```
 
-3. **In your CMakeLists.txt:**
-    ```cmake
-    add_subdirectory($ENV{ROOThelpers_DIR})
-    target_link_libraries(your_target PRIVATE ROOThelpers)
-    ```
+3. **In your consumer `CMakeLists.txt`:**
+   ```cmake
+   find_package(ROOThelpers CONFIG REQUIRED)
+   target_link_libraries(your_target PRIVATE ROOThelpers::ROOThelpers)
+   ```
 
 4. **Include the headers in your code:**
     ```cpp
@@ -32,10 +35,18 @@ You can add ROOThelpers to your project without copying headers manually by usin
     #include <TH1F.h>
 
     TH1F h("h", "test", 10, 0, 1);
-    ROOThelpers::style_axis(&h, "X axis", "Y axis");
+    ROOThelpers::styleAxes(&h, "X axis", "Y axis");
     ```
 
 The `ROOThelpers` library will automatically add the correct include path for you, so you do **not** need to copy headers or manually set include directories.
+
+### Dependency Notes
+
+Users of `ROOThelpers` must make `AnalysisCoreCpp`, `cxxopts`, and `ROOT` discoverable to CMake in their environment (for example via `CMAKE_PREFIX_PATH`, `AnalysisCoreCpp_DIR`, `cxxopts_DIR`, and `ROOT_DIR` as needed).
+
+`cxxopts` is pulled in through `AnalysisCoreCpp`, so in this workflow you should treat `cxxopts_DIR` as required unless your `CMAKE_PREFIX_PATH` already resolves it.
+
+`ROOThelpers` is built with C++20, so your ROOT build must be C++20-compatible as well.
 
 ## Testing
 
