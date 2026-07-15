@@ -11,7 +11,7 @@
 #include "TFile.h"
 #include "TChain.h"
 #include "TTree.h"
-#include "TBranch.h"
+#include "TLeaf.h"
 
 #include "ROOTObjectManager.h"
 
@@ -37,50 +37,30 @@ bool inputFileContainsTree(TFile* file,
     return tree != nullptr;
 }
 
-std::set<std::string> collectSubBranchNames(TBranch* branch){
-    std::set<std::string> branch_names;
-    if (branch == nullptr){
-        throw std::invalid_argument("TChainManager: TBranch is null");
-    }
-    branch_names.insert(branch->GetName());
-    auto* subbranches = branch->GetListOfBranches();
-    if (subbranches==nullptr){
-        throw std::runtime_error(
-            "TChainManager: branch list is null for branch " + 
-            std::string((branch->GetName() != nullptr) ? branch->GetName() : "<unknown>"));
-    }
-
-    for (auto* subbranch: *subbranches ){
-        auto * subbranch_cast=dynamic_cast<TBranch*>(subbranch);
-        if ( subbranch_cast == nullptr){
-            throw std::runtime_error(
-                "TChainManager: invalid entry while processing branch " +
-                std::string((branch->GetName()!= nullptr) ? branch->GetName() : "<unknown>"));
-        }
-        branch_names.merge(collectSubBranchNames(subbranch_cast));
-    }
-    return branch_names;
-}
-
-std::set<std::string> collectBranchNames(TTree* tree){
-    std::set<std::string> branch_names;
+std::set<std::string> collectLeafNames(TTree* tree){
+    std::set<std::string> leaf_names;
     if (tree == nullptr){
         throw std::invalid_argument("TChainManager: TTree is null");
     }
-    auto* branches = tree->GetListOfBranches();
-    if (branches==nullptr){
+    auto* leaves = tree->GetListOfLeaves();
+    if (leaves==nullptr){
         throw std::runtime_error(
-            "TChainManager: branch list is null for TTree");
+            "TChainManager: leaf list is null for TTree");
     }
-    for (auto* branch: *branches ){
-        auto * branch_cast=dynamic_cast<TBranch*>(branch);
-        if ( branch_cast == nullptr){
+    for (auto* obj: *leaves ){
+        auto * leaf=dynamic_cast<TLeaf*>(obj);
+        if ( leaf == nullptr){
             throw std::runtime_error(
-                "TChainManager: TBranch is null while processing TTree ");
+                "TChainManager: TLeaf is null while processing TTree");
         }
-        branch_names.merge(collectSubBranchNames(branch_cast));
+        std::string leaf_name = leaf->GetName();
+        if (leaf_name.empty()){
+                throw std::runtime_error(
+                "TChainManager: TLeaf name is empty");
+        }
+        leaf_names.insert(leaf_name);
     }
-    return branch_names;
+    return leaf_names;
 }
 
 bool validateTreeStructure(TTree* reference_tree,
@@ -88,7 +68,7 @@ bool validateTreeStructure(TTree* reference_tree,
     if (reference_tree == nullptr || candidate_tree == nullptr) {
         return false;
     }
-    return collectBranchNames(reference_tree) == collectBranchNames(candidate_tree);
+    return collectLeafNames(reference_tree) == collectLeafNames(candidate_tree);
 }
 
 }
@@ -122,7 +102,7 @@ TChainManager::TChainManager(std::vector<std::string> files,
 
 ROOTObjectManager<TChain> TChainManager::build() const {
 
-    std::set<std::string> reference_branch_set;
+    std::set<std::string> reference_leaf_set;
 
     for (const auto &filename : files_){
 
@@ -142,14 +122,14 @@ ROOTObjectManager<TChain> TChainManager::build() const {
             TTree *tree = nullptr;
             file->GetObject(tree_name_.c_str(), tree);
 
-            if (reference_branch_set.empty()){
-                reference_branch_set = collectBranchNames(tree);
+            if (reference_leaf_set.empty()){
+                reference_leaf_set = collectLeafNames(tree);
             }
             else {
-                auto branch_set = collectBranchNames(tree);
-                if (reference_branch_set != branch_set){
+                auto leaf_set = collectLeafNames(tree);
+                if (reference_leaf_set != leaf_set){
                     throw std::invalid_argument(
-                        "TChainManager: branch structure mismatch in file: " + filename);
+                        "TChainManager: leaf structure mismatch in file: " + filename);
                 }
             }
         }
