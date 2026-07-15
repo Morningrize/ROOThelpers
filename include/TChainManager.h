@@ -1,18 +1,18 @@
 #ifndef TCHAINMANAGER_H
 #define TCHAINMANAGER_H
 
+#include "ROOTObjectManager.h"
 #include <cstddef>
-#include <memory>
 #include <string>
 #include <vector>
 
-class TChain;
+#include "TChain.h"
 
 namespace ROOThelpers {
 
 struct TChainBuildOptions {
   std::size_t duplicate_sample_count = 10;
-  bool check_branch_consistency = true;
+  bool validate_tree_structure = true;
   bool check_duplicates = true;
 };
 
@@ -21,7 +21,7 @@ public:
   explicit TChainManager(std::vector<std::string> files, std::string tree_name,
                          TChainBuildOptions options = {});
 
-  [[nodiscard]] std::unique_ptr<TChain> build() const;
+  [[nodiscard]] ROOTObjectManager<TChain> build() const;
 
 private:
   std::vector<std::string> files_;
