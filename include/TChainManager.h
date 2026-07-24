@@ -1,17 +1,20 @@
 #ifndef TCHAINMANAGER_H
 #define TCHAINMANAGER_H
 
-#include "ROOTObjectManager.h"
-#include <cstddef>
 #include <string>
 #include <vector>
 
+#include "RtypesCore.h"
 #include "TChain.h"
+
+#include "ROOTObjectManager.h"
 
 namespace ROOThelpers {
 
+constexpr Long64_t MAX_SAMPLE_COUNT = 1000;
+
 struct TChainBuildOptions {
-  std::size_t duplicate_sample_count = 10;
+  Long64_t duplicate_sample_count = 10;
   bool validate_tree_structure = true;
   bool check_duplicates = true;
 };
