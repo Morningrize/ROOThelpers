@@ -176,6 +176,11 @@ ROOTObjectManager<TChain> TChainManager::build() const {
 
     TTree *tree = nullptr;
     file->GetObject(tree_name_.c_str(), tree);
+    
+    if (tree->GetEntries() == 0) {
+      throw std::invalid_argument(
+        "TChainManager: tree '" + tree_name_ + "' in file '" + filename + "' has zero entries");
+    }
 
     if (options_.validate_tree_structure) {
       if (reference_leaf_set.empty()) {
@@ -211,3 +216,4 @@ ROOTObjectManager<TChain> TChainManager::build() const {
   return chain;
 }
 } // namespace ROOThelpers
+

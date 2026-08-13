@@ -31,7 +31,7 @@ jobs:
       - name: Install build tools
         run: |
           apt-get update
-          apt-get install -y git clang-tidy clang-format libgtest-dev
+          apt-get install -y git clang-tidy clang-format libgtest-dev libgmock-dev
 
       - name: Build AnalysisCoreCpp
         run: |
