@@ -14,9 +14,9 @@ namespace ROOThelpers {
 constexpr Long64_t MAX_SAMPLE_COUNT = 1000;
 
 struct TChainBuildOptions {
-  Long64_t duplicate_sample_count = 10;
   bool validate_tree_structure = true;
   bool check_duplicates = true;
+  Long64_t duplicate_sample_count = 10;
 };
 
 class TChainManager {
