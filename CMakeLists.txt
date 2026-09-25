@@ -138,6 +138,7 @@ if(ENABLE_CLANG_TIDY)
     if(CLANG_TIDY)
         file(GLOB_RECURSE ALL_SOURCE_FILES
             ${CMAKE_SOURCE_DIR}/include/*.h
+            ${CMAKE_SOURCE_DIR}/src/*.cpp
             ${CMAKE_SOURCE_DIR}/tests/*.cpp
         )
         add_custom_target(tidy
