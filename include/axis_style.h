@@ -12,11 +12,10 @@ constexpr float DEFAULT_LABEL_SIZE = 0.05F;
 constexpr float DEFAULT_X_TITLE_OFFSET = 1.0F;
 constexpr float DEFAULT_Y_TITLE_OFFSET = 1.1F;
 
-template <typename T> concept HasAxis = requires(T *obj) {
-  { obj->GetXaxis() }
-  ->std::same_as<TAxis *>;
-  { obj->GetYaxis() }
-  ->std::same_as<TAxis *>;
+template <typename T>
+concept HasAxis = requires(T *obj) {
+  { obj->GetXaxis() } -> std::same_as<TAxis *>;
+  { obj->GetYaxis() } -> std::same_as<TAxis *>;
 };
 
 inline void styleAxis(TAxis *axis, const char *title, float title_size,

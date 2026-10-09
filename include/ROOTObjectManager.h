@@ -12,10 +12,9 @@ namespace ROOThelpers {
 
 template <typename T>
 concept TObjectTDirectoryOwned =
-    std::derived_from<T, TObject> &&requires(T *obj, TDirectory *dir) {
-  { obj->SetDirectory(dir) }
-  ->std::same_as<void>;
-};
+    std::derived_from<T, TObject> && requires(T *obj, TDirectory *dir) {
+      { obj->SetDirectory(dir) } -> std::same_as<void>;
+    };
 
 template <TObjectTDirectoryOwned T> class ROOTObjectManager {
 private:
