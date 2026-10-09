@@ -6,9 +6,9 @@ defaults:
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build-and-test:
@@ -43,8 +43,11 @@ jobs:
           . /usr/local/bin/thisroot.sh
           mkdir build
           cd build
-          cmake .. -DENABLE_CLANG_TIDY=ON -DAnalysisCoreCpp_DIR="$GITHUB_WORKSPACE/AnalysisCoreCpp/build/cmake"
-          cmake --build . --target ROOThelpers_tests
+          cmake .. \
+            -DENABLE_CLANG_TIDY=ON \
+            -DBUILD_TESTS=ON \
+            -DAnalysisCoreCpp_DIR="$GITHUB_WORKSPACE/AnalysisCoreCpp/build/cmake"
+          cmake --build . --target tests
 
       - name: Run tests
         run: |
@@ -64,4 +67,4 @@ jobs:
 
       - name: Check formatting with clang-format
         run: |
-          find include tests -name "*.h" -o -name "*.cpp" -print0 | xargs -0 clang-format --dry-run --Werror
+          find include tests \( -name "*.h" -o -name "*.cpp" \) -print0 | xargs -0 clang-format --dry-run --Werror
